@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.LoginDao" >
+  <resultMap id="BaseResultMap" type="com.entity.User" >
+    <id column="uid" property="uid" jdbcType="VARCHAR" />
+    <result column="ownname" property="ownname" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="pass" property="pass" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="lname" property="lname" jdbcType="VARCHAR" />
+    <result column="gname" property="gname" jdbcType="VARCHAR" />
+    <result column="exp" property="exp" jdbcType="VARCHAR" />
+    <result column="needexp" property="needexp" jdbcType="VARCHAR" />
+    <result column="lastDate" property="lastdate" jdbcType="VARCHAR" />
+    <result column="rmk1" property="rmk1" jdbcType="VARCHAR" />
+    <result column="rmk2" property="rmk2" jdbcType="VARCHAR" />
+    <result column="rmk3" property="rmk3" jdbcType="VARCHAR" />
+    <result column="rmk4" property="rmk4" jdbcType="VARCHAR" />
+    <result column="rmk5" property="rmk5" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    uid, ownname, name, pass, sex, state, lname, gname, exp, needexp, lastDate, rmk1, 
+    rmk2, rmk3, rmk4, rmk5
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from lj_user
+    where uid = #{uid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from lj_user
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+  <select id="checkPassword" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from lj_user
+    where name = #{name,jdbcType=VARCHAR} and pass = #{password,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from lj_user
+    where uid = #{uid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.entity.User" >
+    <selectKey resultType="java.lang.String" keyProperty="uid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into lj_user (ownname, name, pass, 
+      sex, state, lname, 
+      gname, exp, needexp, 
+      lastDate, rmk1, rmk2, 
+      rmk3, rmk4, rmk5)
+    values (#{ownname,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{pass,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{lname,jdbcType=VARCHAR}, 
+      #{gname,jdbcType=VARCHAR}, #{exp,jdbcType=VARCHAR}, #{needexp,jdbcType=VARCHAR}, 
+      #{lastdate,jdbcType=VARCHAR}, #{rmk1,jdbcType=VARCHAR}, #{rmk2,jdbcType=VARCHAR}, 
+      #{rmk3,jdbcType=VARCHAR}, #{rmk4,jdbcType=VARCHAR}, #{rmk5,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.entity.User" >
+    <selectKey resultType="java.lang.String" keyProperty="uid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into lj_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ownname != null" >
+        ownname,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="pass != null" >
+        pass,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="lname != null" >
+        lname,
+      </if>
+      <if test="gname != null" >
+        gname,
+      </if>
+      <if test="exp != null" >
+        exp,
+      </if>
+      <if test="needexp != null" >
+        needexp,
+      </if>
+      <if test="lastdate != null" >
+        lastDate,
+      </if>
+      <if test="rmk1 != null" >
+        rmk1,
+      </if>
+      <if test="rmk2 != null" >
+        rmk2,
+      </if>
+      <if test="rmk3 != null" >
+        rmk3,
+      </if>
+      <if test="rmk4 != null" >
+        rmk4,
+      </if>
+      <if test="rmk5 != null" >
+        rmk5,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ownname != null" >
+        #{ownname,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pass != null" >
+        #{pass,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="lname != null" >
+        #{lname,jdbcType=VARCHAR},
+      </if>
+      <if test="gname != null" >
+        #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="exp != null" >
+        #{exp,jdbcType=VARCHAR},
+      </if>
+      <if test="needexp != null" >
+        #{needexp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastdate != null" >
+        #{lastdate,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk1 != null" >
+        #{rmk1,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk2 != null" >
+        #{rmk2,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk3 != null" >
+        #{rmk3,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk4 != null" >
+        #{rmk4,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk5 != null" >
+        #{rmk5,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.entity.User" >
+    update lj_user
+    <set >
+      <if test="ownname != null" >
+        ownname = #{ownname,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pass != null" >
+        pass = #{pass,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="lname != null" >
+        lname = #{lname,jdbcType=VARCHAR},
+      </if>
+      <if test="gname != null" >
+        gname = #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="exp != null" >
+        exp = #{exp,jdbcType=VARCHAR},
+      </if>
+      <if test="needexp != null" >
+        needexp = #{needexp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastdate != null" >
+        lastDate = #{lastdate,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk1 != null" >
+        rmk1 = #{rmk1,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk2 != null" >
+        rmk2 = #{rmk2,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk3 != null" >
+        rmk3 = #{rmk3,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk4 != null" >
+        rmk4 = #{rmk4,jdbcType=VARCHAR},
+      </if>
+      <if test="rmk5 != null" >
+        rmk5 = #{rmk5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where uid = #{uid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.entity.User" >
+    update lj_user
+    set ownname = #{ownname,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      pass = #{pass,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      lname = #{lname,jdbcType=VARCHAR},
+      gname = #{gname,jdbcType=VARCHAR},
+      exp = #{exp,jdbcType=VARCHAR},
+      needexp = #{needexp,jdbcType=VARCHAR},
+      lastDate = #{lastdate,jdbcType=VARCHAR},
+      rmk1 = #{rmk1,jdbcType=VARCHAR},
+      rmk2 = #{rmk2,jdbcType=VARCHAR},
+      rmk3 = #{rmk3,jdbcType=VARCHAR},
+      rmk4 = #{rmk4,jdbcType=VARCHAR},
+      rmk5 = #{rmk5,jdbcType=VARCHAR}
+    where uid = #{uid,jdbcType=VARCHAR}
+  </update>
+</mapper>

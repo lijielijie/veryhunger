@@ -1,0 +1,200 @@
+﻿<html>
+<head>
+<meta charset="UTF-8">
+<title>canvas</title>
+<script type="text/javascript" src="/static/js/jquery-1.8.2.js"></script>
+<style type="text/css">
+body {
+	background-image: url("/static/img/game/bg.jpg");
+	background-size: 100%;
+	width: 100%;height: 100%;
+	margin: 0;padding: 0;
+}
+
+#canvas {
+	cursor: pointer;
+	z-index: 2;
+	position: absolute;
+	top: 3rem;left: 15rem;
+}
+</style>
+</head>
+<body>
+	<div
+		style="z-index: 1; opacity: 0.5; background-color: #000; width: 100%; height: 100%;"></div>
+	<canvas id="canvas" width='1000px' height='600px'></canvas>
+</body>
+</html>
+<script type="text/javascript">
+	  function Block (){};
+    Block.prototype = {
+    	init:function(x,y,width,height,color,type){
+    		this.x=x;this.y=y;
+    		this.width=width;
+    		this.height=height;
+    		this.type=type;
+    		this.color=color;
+    		this.reDraw=true;//允许重画标志
+				this.lightColor=hexToRgba(this.color);
+    		return this;
+    	},
+    	draw:function(){
+    		if(this.reDraw){
+    		cxt.beginPath();
+    		cxt.fillStyle = this.color;
+        	cxt.rect(this.x,this.y, blockSize, blockSize);
+        	cxt.fill();
+        }
+    	},
+    	drawImage:function(image){
+    		this.draw();
+    		this.reDraw=false;
+    		cxt.beginPath();
+        	cxt.drawImage(image,this.x,this.y, blockSize, blockSize);
+        	cxt.fill();
+    	},
+		light:function(ex,ey){
+			if(this.reDraw){
+				cxt.beginPath();
+				cxt.rect(this.x, this.y, this.width, this.height);
+        		cxt.fillStyle = this.lightColor;
+        		cxt.fill();				  	
+			}   		
+    	},
+    	isChoose:function(ex,ey){
+    		if(ex>this.x&&ex<this.x+this.width&&ey>this.y&&ey<this.y+this.height){
+				return true;			
+        	}else{
+				return false;
+			}
+		},
+    }
+    function ImageBlock (){};
+    ImageBlock.prototype = {
+    	init:function(x,y,width,height,type,name,src){
+    		this.x=x;this.y=y;
+    		this.width=width;
+    		this.height=height;
+    		this.type=type;
+    		this.name=name;
+			this.img=new Image();
+			this.img.src=src;
+			return this;
+    	},
+    	draw:function(){
+    		cxt.drawImage(this.img,this.x,this.y, this.width, this.height);
+    	}
+    }
+    
+	var map=[
+			 ["2山脉","1沙漠","1沙漠","1沙漠","1沙漠","2山脉","2山脉","4河流","4河流","4河流","2山脉","2山脉","3平原","6森林","2山脉","5海洋"],
+			 ["4河流","1沙漠","1沙漠","1沙漠","1沙漠","1沙漠","2山脉","4河流","2山脉","2山脉","2山脉","4河流","3平原","3平原","3平原","5海洋"],
+			 ["2山脉","1沙漠","1沙漠","1沙漠","1沙漠","1沙漠","2山脉","4河流","6森林","3平原","3平原","3平原","3平原","3平原","3平原","5海洋"],
+			 ["1沙漠","1沙漠","1沙漠","1沙漠","2山脉","3平原","4河流","4河流","3平原","3平原","3平原","2山脉","3平原","3平原","2山脉","5海洋"],
+			 ["1沙漠","1沙漠","1沙漠","4河流","2山脉","3平原","4河流","2山脉","3平原","3平原","3平原","3平原","3平原","5海洋","5海洋","5海洋"],
+			 ["1沙漠","1沙漠","1沙漠","2山脉","2山脉","3平原","4河流","3平原","3平原","3平原","4河流","3平原","5海洋","5海洋","5海洋","5海洋"],
+			 ["1沙漠","1沙漠","3平原","2山脉","4河流","4河流","4河流","3平原","3平原","3平原","2山脉","2山脉","5海洋","5海洋","3平原","5海洋"],
+			 ["3平原","3平原","3平原","3平原","3平原","3平原","4河流","3平原","2山脉","3平原","3平原","5海洋","5海洋","5海洋","3平原","5海洋"],
+			 ["3平原","3平原","3平原","3平原","3平原","6森林","4河流","4河流","4河流","4河流","4河流","5海洋","5海洋","5海洋","5海洋","5海洋"],
+			 ["3平原","3平原","3平原","3平原","3平原","2山脉","2山脉","3平原","3平原","3平原","3平原","5海洋","5海洋","3平原","3平原","5海洋"],
+			 ["6森林","6森林","4河流","3平原","3平原","3平原","3平原","3平原","3平原","3平原","3平原","5海洋","5海洋","2山脉","3平原","5海洋"],
+			 ["2山脉","6森林","6森林","3平原","3平原","3平原","3平原","3平原","3平原","3平原","6森林","5海洋","5海洋","5海洋","3平原","5海洋"]
+			 ];
+			 		
+	var blockSize=50;
+  	var canvas = $('#canvas')[0];
+ 	var cxt = canvas.getContext('2d');
+	var cx=canvas.getBoundingClientRect().left;
+	var cy=canvas.getBoundingClientRect().top;
+	var mapRow=map[0].length;//每一行个数
+	var mapCol=map.length;//每一列个数
+	var mapWidth=(mapRow-1)*blockSize;//地图宽度
+  	var mapHeight=(mapCol-1)*blockSize;//地图高度
+  	var blocks = [];//所有块
+	var lightBlocks = [];//高亮的块
+			 		
+	var country1_flag=new ImageBlock().init(0+20,0, blockSize*2-20, blockSize*2,10,'country1','/img/game/country1_flag.png');
+	var country2_flag=new ImageBlock().init(mapWidth+blockSize*3,0, blockSize*2-20, blockSize*2,10,'country2','/img/game/country2_flag.png');
+	var country3_flag=new ImageBlock().init(0+20,mapHeight-blockSize, blockSize*2-20, blockSize*2,10,'country3','/img/game/country3_flag.png');
+	var country4_flag=new ImageBlock().init(mapWidth+blockSize*3,mapHeight-blockSize, blockSize*2-20, blockSize*2,10,'country4','/img/game/country4_flag.png');
+	var country1_city=new ImageBlock().init(0,0,0,0,0,'country1','/img/game/country1_city.png');
+	var country2_city=new ImageBlock().init(0,0,0,0,0,'country2','/img/game/country2_city.png');
+	var country3_city=new ImageBlock().init(0,0,0,0,0,'country3','/img/game/country3_city.png');
+	var country4_city=new ImageBlock().init(0,0,0,0,0,'country4','/img/game/country4_city.png');
+	var country1_army=new ImageBlock().init(0,0,0,0,0,'country1','/img/game/country1_army.png');
+	var country2_army=new ImageBlock().init(0,0,0,0,0,'country2','/img/game/country2_army.png');
+	var country3_army=new ImageBlock().init(0,0,0,0,0,'country3','/img/game/country3_army.png');
+	var country4_army=new ImageBlock().init(0,0,0,0,0,'country4','/img/game/country4_army.png');	
+
+	function initDraw(){//绘制地图
+		var color='#000';
+		var type="";
+		for(var i = 0; i < map.length; i++){	   
+			for(var j = 0; j < map[i].length; j++){
+				switch(map[i][j]){
+				case '1沙漠':color='#e0be06';type="1";break;
+				case '2山脉':color='#555555';type="2";break;
+				case '3平原':color='#04a404';type="3";break;
+				case '4河流':color='#23ade5';type="4";break;
+				case '5海洋':color='#0000aa';type="5";break;
+				case '6森林':color='#044404';type="6";break;
+				default:color='#fff';break;
+				}
+				var block = new Block().init(j*blockSize+blockSize*2,i*blockSize,blockSize,blockSize,color,type);
+				block.draw();
+				blocks.push(block);
+			}	
+    }
+    //绘制国旗  
+    country1_flag.draw();
+    country2_flag.draw();
+    country3_flag.draw();
+    country4_flag.draw();
+  }
+  	//鼠标移入高亮
+    $("#canvas").mousemove(function(){
+     	var pos=getChoosePos(event.pageX,event.pageY);
+      if(lightBlocks.length>0){
+      	for(var j = 0; j < lightBlocks.length; j++){
+			lightBlocks[j].draw();	
+		}
+		lightBlocks=[];
+      }
+      if(pos>-1){	
+      	blocks[pos].light();
+      	lightBlocks.push(blocks[pos]);	
+      }
+    });
+    //鼠标移出，全部高亮消除
+	$("#canvas").mouseout(function(){
+      	for(var i = 0; i < lightBlocks.length; i++){
+			lightBlocks[i].draw();	
+		}
+		lightBlocks=[];
+    });
+    //点击加载图片
+    $("#canvas").click(function(){   	
+    	var pos=getChoosePos(event.pageX,event.pageY);
+    	if(pos>-1){
+    		//blocks[pos].drawImage(country2_army.img); 			
+    	}
+    });
+    //hex16进制颜色转rgb(rgba)
+    function hexToRgba(hex) { 
+		var n1=parseInt("0x" + hex.slice(1, 3));
+		var n2=parseInt("0x" + hex.slice(3, 5));
+		var n3=parseInt("0x" + hex.slice(5, 7));
+		return "rgb(" + (n1>200?255:n1+50) + "," + (n2>200?255:n2+50) + "," + (n3>200?255:n3+50) + ")"; 
+	}
+		//获取要高亮的块在blocks中的下标
+	function getChoosePos(ex,ey) { 
+		if(ex - cx>mapWidth+blockSize*3-1||ex - cx<blockSize*2){//不在地图内
+			return -1;
+		}
+		var xnum = parseInt(((ex - cx)/blockSize-2))-1;//要高亮的块在map中的下标
+      	var ynum = parseInt(((ey - cy)/blockSize))-1;
+      	return pos=(ynum+1)*mapRow+xnum+1;//要高亮的块在blocks中的下标
+	}
+		
+    setTimeout("initDraw()",50);
+</script>
