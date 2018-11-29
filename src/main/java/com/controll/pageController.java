@@ -16,7 +16,6 @@ public class pageController {
 	 */
 	@RequestMapping("/{html}") 
 	public String gotoLable(HttpServletRequest req,@PathVariable("html") String html) {
-		System.out.println(html);
         return html;
 	}
 
