@@ -1,15 +1,25 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript" src="/static/js/jquery-1.8.2.js"></script>
 <script type="text/javascript" src="/static/js/wangEditor.min.js"></script>
 
 <style type="text/css">
-
+#write-content{
+	width: 60rem;height: 20rem;
+    position: absolute;
+    left: 5rem;top: 8rem;
+}
+#write-panl{
+	background-color: #eee;
+}
 </style>
 
 <div id="pageHead"><script type="text/javascript">$(document).ready(function () {$('#pageHead').load('/head')});</script></div>
 
-<div id="write-content"></div>
+<div id="write-content">
+	<div id="write-panl"></div>
+</div>
 <script>
 	var E = window.wangEditor;
-	var editor = new E('#write-content');
+	var editor = new E('#write-panl');
 	editor.create();
 </script>
