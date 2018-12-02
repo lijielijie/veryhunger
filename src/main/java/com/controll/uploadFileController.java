@@ -67,22 +67,20 @@ public class uploadFileController {
 	 */
 	@RequestMapping(value = "/uploadArticleImage", method = RequestMethod.POST)
 	@ResponseBody
-	public String reciveArticleImage(HttpServletRequest req, @RequestParam("file") MultipartFile file) {
+	public String reciveArticleImage(HttpServletRequest req, @RequestParam("file") MultipartFile file,@RequestParam("fileName") String fileName) {
 		// 如果文件不为空，写入上传路径
 		if (!file.isEmpty()) {
 			// 上传文件路径
 			File filepath = new File(BaseSet.ARTICLE_IMAGEPATH);// 本地img文件夹
-			// 判断路径是否存在，如果不存在就创建一个
 			if (!filepath.exists()) {
 				filepath.mkdirs();
 			}
 			// 上传文件名
-			String filename = "image_" + System.currentTimeMillis();
-			// 将上传文件保存到文件夹当中
-			try {
+			String filename = "image_" + System.currentTimeMillis()+"."+fileName.split("\\.")[1];
+			try {// 将上传文件保存到文件夹当中
 				String localFileName = BaseSet.ARTICLE_IMAGEPATH + File.separator + filename;
 				file.transferTo(new File(localFileName));// 保存到一个本地文件
-				return "download/downArticleImage/" + filename;
+				return "/download/downArticleImage/" + filename;
 			} catch (IllegalStateException e) {
 				logger.error("非法参数");
 			} catch (IOException e) {

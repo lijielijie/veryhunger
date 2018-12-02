@@ -20,6 +20,6 @@ public class BaseSet {
 	public static SimpleDateFormat fastDateFormat=new SimpleDateFormat("yyyyMMddHHmmss");
 	
 	//配置项
-	//public static String ARTICLE_IMAGEPATH="C:/Users/lijie/Desktop/image";
-	public static String ARTICLE_IMAGEPATH="/app/fileStore/articleImage";
+	public static String ARTICLE_IMAGEPATH="C:/Users/lijie/Desktop/image";
+	//public static String ARTICLE_IMAGEPATH="/app/fileStore/articleImage";
 }

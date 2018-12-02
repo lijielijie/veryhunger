@@ -1,93 +1,111 @@
 <style type="text/css">
-html {
-	font-size: 20px;
-	background-image: url("/static/img/bg/bg1.jpg");background-repeat:no-repeat;
+* {
+	margin: 0;
+	padding: 0;
 }
 
-* {
-	font-family: "微软雅黑";
-	margin: 0;padding: 0;
-	width: 100%;height: 100%;
-	overflow: hidden;
-}
-p {
+html {
+	font-size: 16px;
+	background-image: url("/static/img/bg/bg1.jpg");
+	background-repeat: no-repeat;
 	width: 100%;
-	height: 2rem;
-	line-height: 2rem;
-	margin: 0.5rem;
-	cursor: pointer;
+	height: 100%;
+	overflow: hidden;
+	background-position: center center;
+	background-size: cover; /*背景图自适应*/
 }
+
 #pageHead {
-	background-color: rgba(45, 6, 47,0.9);
-	height: 2rem;
+	background-color: rgba(45, 6, 47, 0.9);
+	height: 3rem;
 	position: relative;
 }
+
 #wait {
-	left:45%;top:35%;
-	width:64px;height: 64px;
+	left: 45%;
+	top: 35%;
+	width: 64px;
+	height: 64px;
 	position: absolute;
 	z-index: 999;
-	background-color:#fff;
-	display:none;
+	background-color: #fff;
+	display: none;
 }
+
 #north-center {
 	position: absolute;
 	left: 30%;
-	width: 40%;height: 100%;
+	width: 40%;
 }
+
 #north-right {
 	position: absolute;
 	left: 70%;
-	width: 30%;height: 100%;
+	width: 30%;
 	display: inline;
 }
+
 #north-center a {
-	line-height: 50px;
+	font-size: 1.5rem;
+	line-height: 3rem;
 	text-align: center;
-	width: 20%;height: 100%;
+	width: 20%;
 	text-decoration: none;
 	color: #fff;
 	display: inline-block;
 	cursor: pointer;
 }
+
 #north-center a:hover {
 	background-color: red;
 }
+
 #north-right a {
 	text-decoration: none;
-	color: gold;display: inline;
+	color: gold;
+	display: inline;
 }
+
 #north-right a:hover {
 	color: yellow;
 }
+
 #north-right #user-img {
-	width:10%;
+	width: 10%;
 	display: inline;
 }
+
 #north-right #user {
-	width:10%;
+	width: 10%;
 	display: inline;
 }
+
 #north-right img {
 	margin-top: 0vmin;
-	height: 8vmin;width: 8vmin;
+	height: 8vmin;
+	width: 8vmin;
 	border-radius: 4vmin;
 	vertical-align: middle;
 }
+
 #north-right #upload-img {
 	line-height: 5vmin;
 	text-align: center;
 	margin-left: -6.5vmin;
-	height: 4vmin;width: 11vmin;
+	height: 4vmin;
+	width: 11vmin;
 	border-radius: 1vmin;
 	color: #ea67e9;
 	background-color: #2d062f;
 	font-size: 2vmin;
 	display: none;
 }
+
 #up-img-window {
-	left: 62vmin;top: 20vmin;
-	width: 75vmin;height: 40vmin;
+	left: 62vmin;
+	top: 20vmin;
+	width: 75vmin;
+	height: 40vmin;
 	position: absolute;
 	background-color: #2d062f;
 	z-index: 999;
@@ -95,126 +113,124 @@ p {
 	box-shadow: 3px -3px 3px #000;
 	display: none;
 }
+
 #show-img {
-	width: 33vmin;height: 40vmin;
+	width: 33vmin;
+	height: 40vmin;
 }
+
 #img-file {
-	width: 40vmin;height: 3vmin;
-	margin-left: 35vmin;margin-top: -35vmin;
+	width: 40vmin;
+	height: 3vmin;
+	margin-left: 35vmin;
+	margin-top: -35vmin;
 }
+
 #up-img-but {
-	width: 10vmin;height: 5vmin;
-	margin-left: 60vmin;margin-top: -10vmin;
+	width: 10vmin;
+	height: 5vmin;
+	margin-left: 60vmin;
+	margin-top: -10vmin;
 }
+
 #hide-img-but {
-	width: 10vmin;height: 5vmin;
-	margin-left: 35vmin;margin-top: -10vmin;
+	width: 10vmin;
+	height: 5vmin;
+	margin-left: 35vmin;
+	margin-top: -10vmin;
 }
 </style>
-	<!-- 所有页面的头导航-->
-	<div id="north">
-		<nav id="north-center"> 
-			<a page="guangchang">广场</a> 
-			<a page="chuangzuo">创作</a> 
-			<a page="jiayuan">家园</a> 
-			<a page="shezhi">设置</a>
-		</nav>
-		<div id="north-right">
-			<div id="user-img">
-				<img id="show-user-img" alt="请上传您的头像" style="background:#2d062f"  /> 
-				<!--  a id="upload-img" onclick="showImgWindow()">更&nbsp换（服务器版本暂不支持）</a-->
-			</div>
-			<div id="user">
-				<a id="user-name" style=" float: right;">${user.ownname}</a>
-			</div>
-			<a style=" float:right;" href="/user/login">登录&nbsp;&nbsp;&nbsp;&nbsp;</a>
-		</div>
+<!-- 所有页面的头导航-->
+<nav id="north-center">
+	<a page="square">广场</a> <a page="chuangzuo">创作</a> <a page="jiayuan">家园</a>
+	<a page="shezhi">设置</a>
+</nav>
+<div id="north-right">
+	<div id="user-img">
+		<img id="show-user-img" alt="请上传您的头像" style="background: #2d062f" />
+		<!--  a id="upload-img" onclick="showImgWindow()">更&nbsp换（服务器版本暂不支持）</a-->
 	</div>
-	<!-- 弹出的窗体-->
-	<div id="up-img-window">
-		<img alt="请上传您的头像" id="show-img" src="">
-		<input type="file" id="img-file" name="imgFile" onchange="getImgURL(this)" />
-		<button type="button" id="up-img-but" >上传</button>
-		<button type="button" id="hide-img-but" onclick="showImgWindow()">取消</button>
+	<div id="user">
+		<a id="user-name" style="float: right;">${user.ownname}</a>
 	</div>
-	<script type="text/javascript">
-		var loginName = $("#user-name").text();
-		$("#user").hover(function() {//替换用户名与退出	
-			if (loginName == $("#user-name").text()) {
-				$("#user-name").text('退出');
-				$("#user-name").attr("href", "user/loginOut");
-			} else {
-				$("#user-name").text(loginName);
-				$("#user-name").attr("href", "");
-			}
-		});
-		$("#user-img").hover(function() {//显示上传头像按钮$
-			$("#pause").trigger("click");
-			$("#upload-img").toggle();
-		});
-		//开关上传图片窗体		
-		function showImgWindow() {
-			if ($('#up-img-window').is(":hidden")) {//上传图片窗体图片栏置为当前头像图像				
-				$("#show-img").attr("src", $("#show-user-img").attr("src"));
-				$('#up-img-window').show();
-			} else {
-				$('#up-img-window').hide();
-			}
+	<a style="float: right;" href="/user/login">登录&nbsp;&nbsp;&nbsp;&nbsp;</a>
+</div>
+<!-- 弹出的窗体-->
+<div id="up-img-window">
+	<img alt="请上传您的头像" id="show-img" src=""> <input type="file"
+		id="img-file" name="imgFile" onchange="getImgURL(this)" />
+	<button type="button" id="up-img-but">上传</button>
+	<button type="button" id="hide-img-but" onclick="showImgWindow()">取消</button>
+</div>
+<script type="text/javascript">
+	var loginName = $("#user-name").text();
+	$("#user").hover(function() {//替换用户名与退出	
+		if (loginName == $("#user-name").text()) {
+			$("#user-name").text('退出');
+			$("#user-name").attr("href", "user/loginOut");
+		} else {
+			$("#user-name").text(loginName);
+			$("#user-name").attr("href", "");
 		}
-
-		//获取图片路径
-		function getImgURL(node) {
-			if (node.files && node.files[0]) {
-				var reader = new FileReader();
-				reader.onload = function(e) {
-					$("#show-img").attr("src", e.target.result);
-				};
-			}
-			reader.readAsDataURL(node.files[0]);
+	});
+	$("#user-img").hover(function() {//显示上传头像按钮$
+		$("#pause").trigger("click");
+		$("#upload-img").toggle();
+	});
+	//开关上传图片窗体		
+	function showImgWindow() {
+		if ($('#up-img-window').is(":hidden")) {//上传图片窗体图片栏置为当前头像图像				
+			$("#show-img").attr("src", $("#show-user-img").attr("src"));
+			$('#up-img-window').show();
+		} else {
+			$('#up-img-window').hide();
 		}
+	}
 
-		//上传图片
-		$("#up-img-but").click(function() {
-			var formData = new FormData();//初始化一个FormData对象
-			formData.append("file", $("#img-file")[0].files[0]);//将文件塞入FormData
-			$("#wait").show();
-			$.ajax({
-				url : "upload/userImage",
-				type : "POST",
-				data : formData,
-				processData : false, // 告诉jQuery不要去处理发送的数据
-				contentType : false, // 告诉jQuery不要去设置Content-Type请求				
-				success : function(responseText) {
-					if (1==responseText) {
-						alert("头像已成功上传至hadoop");
-						$('#up-img-window').hide();
-						$("#show-user-img").attr("src",$("#show-img").attr("src"));
-					}else{
-						alert("上传失败");
+	//获取图片路径
+	function getImgURL(node) {
+		if (node.files && node.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				$("#show-img").attr("src", e.target.result);
+			};
+		}
+		reader.readAsDataURL(node.files[0]);
+	}
+
+	//上传图片
+	$("#up-img-but").click(
+			function() {
+				var formData = new FormData();//初始化一个FormData对象
+				formData.append("file", $("#img-file")[0].files[0]);//将文件塞入FormData
+				$("#wait").show();
+				$.ajax({
+					url : "upload/userImage",
+					type : "POST",
+					data : formData,
+					processData : false, // 告诉jQuery不要去处理发送的数据
+					contentType : false, // 告诉jQuery不要去设置Content-Type请求				
+					success : function(responseText) {
+						if (1 == responseText) {
+							alert("头像已成功上传至hadoop");
+							$('#up-img-window').hide();
+							$("#show-user-img").attr("src",
+									$("#show-img").attr("src"));
+						} else {
+							alert("上传失败");
+						}
 					}
-				}
+				});
+				$("#wait").hide();
 			});
-			$("#wait").hide();
-		});
-		//通过导航iframe跳转到指定页面		
-		$("#north-center a").on("click",function(e){
-			  $("#content-iframe").attr("src",$(this).attr("href"));
-			  return false;
-		});
-		//防止误跳出编辑页面
-		function ifArticleSave(src){
-			if (document.getElementById("content-iframe").src=='http://127.0.0.1:8080/test1/page/html/writeArticle') {
-				if (document.getElementById("content-iframe").contentWindow.document.getElementsByClassName("text-tag").length>0) {//如果用户新增了文本输入框，就校验
-					var r=confirm("您还没编写完并保存文章，确定离开编辑页面？");
-				  	if (r==false){//选择取消
-				  		return;
-				  	}
-				}
+
+	$("#north-center a").click(function() {
+		if (window.editor&&window.editor.txt.text()!="") {
+			var r = confirm("即将跳转至其他页面，请确认您已将文本保存本地或提交服务器！\r\n点击确定跳转页面\r\n点击取消留在本页面");
+			if (r == false) {//选择取消
+				return;
 			}
-			document.getElementById("content-iframe").src=src;//允许跳转
 		}
-		
-		$("#north a").click(function(){
-			$(window).attr('location',"/page/"+$(this).attr("page"));
-		})
-	</script>
+		$(window).attr('location', "/page/" + $(this).attr("page"));
+	})
+</script>
