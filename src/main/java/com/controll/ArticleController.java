@@ -2,9 +2,12 @@ package com.controll;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,20 +33,30 @@ public class ArticleController {
 	 */
 	@RequestMapping(value = "/uploadArticle", method = RequestMethod.POST)
 	@ResponseBody
-	public String uploadArticle(HttpServletRequest req, @RequestParam("articleRole") String articleRole,@RequestParam("articleCentent") String articleCentent,@RequestParam("title") String title) {
+	public String uploadArticle(HttpServletRequest req,@RequestParam("articleUuid") String articleUuid, @RequestParam("articleRole") String articleRole,@RequestParam("articleCentent") String articleCentent,@RequestParam("title") String title) {
 		User user = (User) req.getSession().getAttribute(BaseSet.USER);
 		Article article=new Article();
-		article.setId(String.valueOf(System.currentTimeMillis()));//毫秒数作为主键
+		String uuid="";
 		article.setUserId(user.getUid());
 		article.setTitle(title);
 		article.setRole(articleRole);
 		article.setCentent(articleCentent);
 		article.setState("1");
-		article.setCreateTime(BaseSet.fastDateFormat.format(new Date()));
 		article.setUpdateTime(BaseSet.fastDateFormat.format(new Date()));
 		article.setReadCount(0);
-		articleDao.insert(article);
-		return "保存成功";
+		try {
+			if(StringUtils.isNotEmpty(articleUuid)) {//不为空，则更新
+				article.setId(uuid=articleUuid);
+				articleDao.updateByPrimaryKeySelective(article);
+			}else{
+				article.setId(uuid = UUID.randomUUID().toString().replaceAll("\\-", ""));
+				article.setCreateTime(BaseSet.fastDateFormat.format(new Date()));
+				articleDao.insert(article);
+			}
+			return uuid;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	/**
 	 * 获取用户可以访问的所有文章

@@ -17,7 +17,7 @@ public class BaseSet {
 	public static int ERR_PASSWORD=3;
 	
 	//工具项
-	public static SimpleDateFormat fastDateFormat=new SimpleDateFormat("yyyyMMddHHmmss");
+	public static SimpleDateFormat fastDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	//配置项
 	public static String ARTICLE_IMAGEPATH="C:/Users/lijie/Desktop/image";

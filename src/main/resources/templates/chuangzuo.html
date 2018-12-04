@@ -30,6 +30,10 @@
 	background-color: #eee;
 	height:25rem;
 }
+#write-panl .w-e-menu{
+	font-size: 1.2rem;
+	line-height:1rem;
+}
 #write-panl p{
 	cursor: text;
 }
@@ -51,6 +55,7 @@ button{
 		<option>公开</option>
 		<option>私人</option>
 	</select>
+	<input id="write-uuid" style="display:none"></input>
 </div>
 <div class="normal-text" >正文：</div>
 <div id="write-content">
@@ -58,7 +63,7 @@ button{
 </div>
 <br>
 <div id="write-submit" style="text-align: right;">
-	<button style="background-color: #2196F3;margin-right:1rem;" onclick="uploadArticle()">提交</button>
+	<button style="background-color: #2196F3;margin-right:1rem;" onclick="uploadArticle()">保存</button>
 	<button style="background-color: #dd5986;margin-right:10rem;" onclick="clearArticle()">重置</button>
 </div>
 
@@ -70,7 +75,7 @@ button{
 	editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
 	editor.customConfig.uploadImgMaxLength = 1;
 	editor.customConfig.onchange = function (html) {
-        console.log(editor.txt.text().length);// html 即变化之后的内容
+		document.getElementById('fontCount').innerText=editor.txt.text().length;
     }
 	editor.customConfig.customUploadImg = function (files, insert) {
 		for(var n=0;n<files.length;n++){
@@ -99,11 +104,11 @@ button{
 	}
 	function uploadArticle(){
 		if ($('#write-title').val()==""||$('#write-title').val()=="请把我填上标题，谢谢！！") {
-			$('#write-title').val("请把我填上标题，谢谢！！");
+			alert("请把我填上标题，谢谢！！");
 			return;
 		}
 		if (editor.txt.text()=="") {
-			editor.txt.html('<p>稍微写点东西吧</p>')
+			alert('<p>稍微写点东西吧</p>')
 			return;
 		}
 		var r=confirm("确认提交保存?");
@@ -113,10 +118,15 @@ button{
 		$.ajax({
 			url : "/article/uploadArticle",
 			type : "POST",
-			data : {articleRole:$('#write-role option:selected').val(),articleCentent:editor.txt.html(),title:$('#write-title').val()},
+			data : {articleUuid:$('#write-uuid').val(),articleRole:$('#write-role option:selected').val(),articleCentent:editor.txt.html(),title:$('#write-title').val()},
 			async:false, 
-			success : function(result) {
-				alert(result);
+			success : function(articleUuid) {
+				if(articleUuid!=""&&articleUuid.length==32){
+					$('#write-uuid').val(articleUuid);
+					alert("保存成功!\r\n您可以继续编辑，文本再次保存后会更新上一次保存的文本");
+				}else{
+					alert("保存失败!请联系管理员")
+				}
 			}
 		});
 	}
