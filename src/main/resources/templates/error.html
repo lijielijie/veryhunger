@@ -1,11 +1,12 @@
 ﻿<html>
 <head>
 <meta charset="UTF-8">
-<title>canvas</title>
+<meta name="viewport" content="width=device-width, initial-scale=0.4">
+<title>i am 404</title>
 <script type="text/javascript" src="/static/js/jquery-1.8.2.js"></script>
 <style type="text/css">
 body {
-	background-image: url("/static/img/game/bg.jpg");
+	background-image: -webkit-linear-gradient(top,rgb(47, 32, 75),rgb(57,73,132)25%,rgb(204,102,110)70%,rgb(238,182,109));
 	background-size: 100%;
 	width: 100%;height: 100%;
 	margin: 0;padding: 0;
@@ -15,13 +16,21 @@ body {
 	cursor: pointer;
 	z-index: 2;
 	position: absolute;
-	top: 3rem;left: 15rem;
+	top: 3rem;margin:3rem 15%;
+}
+#home-title{
+	text-align:center;
+	font-size:2rem;
+	color:#00bffa;
+	text-shadow:0 0 20px #fff ,0 0 50px #00bffa ,0 0 100px #fff ;
 }
 </style>
 </head>
 <body>
-	<div
-		style="z-index: 1; opacity: 0.5; background-color: #000; width: 100%; height: 100%;"></div>
+	<div id="pageHead"><script type="text/javascript">$(document).ready(function () {$('#pageHead').load('/head')});</script></div>
+	<div style="z-index: 1; opacity: 0.5; background-color: #000; width: 100%; height: 100%;">
+		<div id="home-title">建造中</div>
+	</div>
 	<canvas id="canvas" width='1000px' height='600px'></canvas>
 </body>
 </html>
@@ -113,18 +122,18 @@ body {
   	var blocks = [];//所有块
 	var lightBlocks = [];//高亮的块
 			 		
-	var country1_flag=new ImageBlock().init(0+20,0, blockSize*2-20, blockSize*2,10,'country1','/img/game/country1_flag.png');
-	var country2_flag=new ImageBlock().init(mapWidth+blockSize*3,0, blockSize*2-20, blockSize*2,10,'country2','/img/game/country2_flag.png');
-	var country3_flag=new ImageBlock().init(0+20,mapHeight-blockSize, blockSize*2-20, blockSize*2,10,'country3','/img/game/country3_flag.png');
-	var country4_flag=new ImageBlock().init(mapWidth+blockSize*3,mapHeight-blockSize, blockSize*2-20, blockSize*2,10,'country4','/img/game/country4_flag.png');
-	var country1_city=new ImageBlock().init(0,0,0,0,0,'country1','/img/game/country1_city.png');
-	var country2_city=new ImageBlock().init(0,0,0,0,0,'country2','/img/game/country2_city.png');
-	var country3_city=new ImageBlock().init(0,0,0,0,0,'country3','/img/game/country3_city.png');
-	var country4_city=new ImageBlock().init(0,0,0,0,0,'country4','/img/game/country4_city.png');
-	var country1_army=new ImageBlock().init(0,0,0,0,0,'country1','/img/game/country1_army.png');
-	var country2_army=new ImageBlock().init(0,0,0,0,0,'country2','/img/game/country2_army.png');
-	var country3_army=new ImageBlock().init(0,0,0,0,0,'country3','/img/game/country3_army.png');
-	var country4_army=new ImageBlock().init(0,0,0,0,0,'country4','/img/game/country4_army.png');	
+	var country1_flag=new ImageBlock().init(0+20,0, blockSize*2-20, blockSize*2,10,'country1','/static/img/game/country1_flag.png');
+	var country2_flag=new ImageBlock().init(mapWidth+blockSize*3,0, blockSize*2-20, blockSize*2,10,'country2','/static/img/game/country2_flag.png');
+	var country3_flag=new ImageBlock().init(0+20,mapHeight-blockSize, blockSize*2-20, blockSize*2,10,'country3','/static/img/game/country3_flag.png');
+	var country4_flag=new ImageBlock().init(mapWidth+blockSize*3,mapHeight-blockSize, blockSize*2-20, blockSize*2,10,'country4','/static/img/game/country4_flag.png');
+	var country1_city=new ImageBlock().init(0,0,0,0,0,'country1','/static/img/game/country1_city.png');
+	var country2_city=new ImageBlock().init(0,0,0,0,0,'country2','/static/img/game/country2_city.png');
+	var country3_city=new ImageBlock().init(0,0,0,0,0,'country3','/static/img/game/country3_city.png');
+	var country4_city=new ImageBlock().init(0,0,0,0,0,'country4','/static/img/game/country4_city.png');
+	var country1_army=new ImageBlock().init(0,0,0,0,0,'country1','/static/img/game/country1_army.png');
+	var country2_army=new ImageBlock().init(0,0,0,0,0,'country2','/static/img/game/country2_army.png');
+	var country3_army=new ImageBlock().init(0,0,0,0,0,'country3','/static/img/game/country3_army.png');
+	var country4_army=new ImageBlock().init(0,0,0,0,0,'country4','/static/img/game/country4_army.png');	
 
 	function initDraw(){//绘制地图
 		var color='#000';
@@ -176,7 +185,7 @@ body {
     $("#canvas").click(function(){   	
     	var pos=getChoosePos(event.pageX,event.pageY);
     	if(pos>-1){
-    		//blocks[pos].drawImage(country2_army.img); 			
+    		blocks[pos].drawImage(country2_army.img); 			
     	}
     });
     //hex16进制颜色转rgb(rgba)

@@ -1,28 +1,22 @@
+<head>
 <script type="text/javascript" src="/static/js/jquery-1.8.2.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=0.6">
+<title>分享快乐 记录点滴</title>
 <style type="text/css">
 #article-content{
-	display: flex;
-	flex-direction: column;
-	overflow: auto;
 	height:95%;
 }
 .center-article-left>p:hover{
  	background-color: red;
 }
-#center-article-center{
-	display: flex;
-	flex-flow: row wrap;
-    align-content: flex-start;
-}
 
 .article-block{
-	display: flex;
-	width:23%;height:8rem;
-	margin:0.8rem;
-	margin-right:0rem;
-	background-color: #fff;
-	cursor: pointer;
-	padding: 0.1rem;
+	width:29%;height:9.5rem;
+	margin:.5rem .5rem 0 0;
+	background-color: #ffdab5;
+	padding: 0.5rem 0 0.5rem 0.5rem;
+	display: inline-block;
+	position: relative;
 }
 .article-block:hover{
 	background-color: gold;
@@ -34,61 +28,108 @@
 }
 .article-block-title{
 	font-weight: bold;
-	font-size: 22px;
-	height:6rem;max-width: 80%;
-	margin:0.5rem;
+	font-size: 1rem;
+	height:7rem;
+	width:70%;
 	word-break:break-all; 
-	text-overflow: ellipsis
+	text-overflow: ellipsis;
+	display: inline-block;
 }
 .article-block-otherInfo{
 	color: #aaa;
-	font-size: 10px;
+	font-size: .8rem;
 	height:1rem;
-	text-align:right;
-	margin-right:0.5rem;
+	text-align:left;
+	padding:0 0 0.3rem 0;
+}
+.article-block-otherInfo div{
+	display: inline-block;
+	padding:.5rem .5rem .5rem 0rem;
+}
+#edit-div{
+	width:30%;height:7rem;
+	display: inline-block;
+	text-align: center;
+	position: absolute;
+	right: 0;
+}
+.edit-arti{
+	font-size: 1rem;
+	border-radius:0 0 0 .5rem;
+	background-color:#21b7f3;
+	cursor:pointer;
+	height:3rem;
+	line-height: 3rem;
+}
+.show-arti{
+	font-size: 1rem;
+	border-radius:.5rem 0 0 0;
+	background-color:#e5b3b4;
+	cursor:pointer;
+	height:3rem;
+	line-height: 3rem;
 }
 </style>
-
+</head>
+<body>
 <div id="pageHead"><script type="text/javascript">$(document).ready(function () {$('#pageHead').load('/head')});</script></div>
 <div id="article-content">
-	<div id="center-article" class="article-column" style="height:100%;display: flex;flex-direction: row;background-color: #fff">
-		<div id="center-article-left" class="article-column" style="flex: 1;background-color: #c9513e;padding: 1rem;font-weight: bold;">
-			<p id="allArticles-all" onclick="getArticleList()" style="color:white;">全部文章</p>
-			<p id="allArticles-self" onclick="selfArticleList()" style="color:#ddd;">自己文章</p>
+	<div id="center-article" class="article-column" style="height:100%;">
+		<div id="center-article-left" class="article-column" style="position: fixed;width:20%;height:30%;padding: 1rem 0 1rem 0;font-weight: bold; background-color: rgba(0,0,0,.2);">
+			<p id="allArticles-all" onclick="getArticleList()" style="color:white;margin:.5rem">全部文章</p>
+			<p id="allArticles-self" onclick="selfArticleList()" style="color:#ddd;margin:.5rem">自己文章</p>
 		</div>
-		<div id="center-article-center" class="article-column" style="flex: 8;background-color: pink"></div>
+		<div id="center-article-center" class="article-column" style="position: absolute;left:20%;width:80%;"></div>
 	</div>
 </div>
 <script>
-	getArticleList();
 	//selfArticleList();
 	function getArticleList(){
 		$.getJSON("/article/getArticleList", function(result){
 			articleBlock(result)
-			document.getElementById("allArticles-all").innerHTML="全部文章(<b style='color:#00ffde;font-size: 18px;'>"+result.length+"</b>)";
+			document.getElementById("allArticles-all").innerHTML="全部文章(<b style='color:#00ffde;font-size: 1rem;'>"+result.length+"</b>)";
 		  });
 	}
 	function selfArticleList(){
 		$.getJSON("/article/selfArticleList", function(result){
+			if(result==null){
+				var r = confirm("您需要登陆后才能进入此页面！\r\n点击确定 跳转 登录\r\n点击取消 留在 本页面");
+				if (r == true) {//选择取消
+					$(window).attr('location',"/user/login");
+				}
+			}
 			articleBlock(result)
-			document.getElementById("allArticles-self").innerHTML="自己文章(<b style='color:#00ffde;font-size: 18px;'>"+result.length+"</b>)";
+			document.getElementById("allArticles-self").innerHTML="自己文章(<b style='color:#00ffde;font-size: 1rem;'>"+result.length+"</b>)";
 		  });
 	}
 	function articleBlock(result){
 		document.getElementById("center-article-center").innerHTML="";
+		var userName=$("#user-login").text();
 		for (var i = 0; i < result.length; i++) {
-			nodeHtml="<div class='article-block' id='"+result[i]["id"]+"' onclick='openUrl(this)'>"+
-					 "<img class='article-block-image' alt='暂无封面' src='/static/img/pig.gif'></img><div>"+
-					 "<div class='article-block-title'>"+result[i]["title"]+"</div>"+
-					 "<div class='article-block-otherInfo'>"+result[i]["userName"]+createDate(result[i]["updateTime"])+" ("+result[i]["readCount"]+")</div></div></div>"
+			if(userName==result[i]["userName"]){
+				nodeHtml="<div class='article-block' id='"+result[i]["id"]+"'>"+
+				 "<div><div class='article-block-title'>"+result[i]["title"]+"</div><div id='edit-div'><div class='show-arti' >阅读</div><div class='edit-arti'>编辑</div></div></div>"+
+				 "<div class='article-block-otherInfo'><div>作者:"+result[i]["userName"]+"</div><div>阅读:"+result[i]["readCount"]+"</div></div>"+
+				 "<div class='article-block-otherInfo'><div>更新:"+formtDate(result[i]["updateTime"])+"</div></div></div>";
+			}else{
+				nodeHtml="<div class='article-block' id='"+result[i]["id"]+"'>"+
+				 "<div><div class='article-block-title'>"+result[i]["title"]+"</div><div id='edit-div'><div class='show-arti' style='border-radius:.5rem 0 0 .5rem'>阅读</div><div class='edit-arti' style='display:none'>编辑</div></div></div>"+
+				 "<div class='article-block-otherInfo'><div>作者:"+result[i]["userName"]+"</div><div>阅读:"+result[i]["readCount"]+"</div></div>"+
+				 "<div class='article-block-otherInfo'><div>更新:"+formtDate(result[i]["updateTime"])+"</div></div></div>";
+			}
 			document.getElementById("center-article-center").innerHTML+=nodeHtml;		 
 		}
 	} 
-	function createDate(updateTime){
-		return "  "+updateTime.substring(0,4)+"/"+updateTime.substring(4,6)+"/"+updateTime.substring(6,8)+" ";
+	function formtDate(date){
+		return date.substring(0,10);
 	}
-	//开新窗口展示文章
-	function openUrl(e){
-       window.open("/article/openArticle?id="+e.id);
-    }
+	$(".show-arti").live('click',function(event) {
+		console.log($(this).parent().parent().parent()[0]);
+		window.open("/page/toShow?articleId="+$(this).parent().parent().parent()[0].id);
+	})
+	$(".edit-arti").live('click',function() {//跳转编辑面，并在session存入文章id
+		$(window).attr('location',"/page/toAdit?articleId="+$(this).parent().parent().parent()[0].id);
+	})
+	getArticleList();
 </script>
+</body>

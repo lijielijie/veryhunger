@@ -23,7 +23,7 @@ public class LoginConfiguration implements WebMvcConfigurer {
         // 排除资源请求
         loginRegistry.excludePathPatterns("/static/**");
         // 排除登录登出路径
-        loginRegistry.excludePathPatterns("/","/user/**","/head","/page/square");
+        loginRegistry.excludePathPatterns("/","/user/**","/head","/page/square","/article/getArticleList","/article/selfArticleList");
         // 拦截路径
         loginRegistry.addPathPatterns("/**");
     }

@@ -2,6 +2,8 @@ package com.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.entity.Article;
 
 public interface ArticleDao {
@@ -19,8 +21,8 @@ public interface ArticleDao {
 
     int updateByPrimaryKey(Article record);
     
-    List<Article> getArticlesByUserId(String userId);
-	List<Article> selfArticleList(String userId);
+    List<Article> getArticlesByUserId(@Param("userId")String userId);
+	List<Article> selfArticleList(@Param("userId")String userId);
 	public Article openArticle(String id);
     void updateArticle(Article article);
 }

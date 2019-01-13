@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/static/js/jquery-1.8.2.js"></script>
 <style type="text/css">
 * {
 	margin: 0;
@@ -6,15 +7,16 @@
 
 html {
 	font-size: 16px;
-	background-image: url("/static/img/bg/bg1.jpg");
-	background-repeat: no-repeat;
+	background-image: -webkit-linear-gradient(top,rgb(57,73,132),rgb(204,102,110)30%,rgb(238,182,109)50%,rgb(204,102,110)70%,rgb(57,73,132));
+	background-repeat: repeat;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
 	background-position: center center;
 	background-size: cover; /*背景图自适应*/
 }
-
+body{
+	height: 100%;
+}
 #pageHead {
 	background-color: rgba(45, 6, 47, 0.9);
 	height: 3rem;
@@ -34,8 +36,8 @@ html {
 
 #north-center {
 	position: absolute;
-	left: 30%;
-	width: 40%;
+	left: 20%;
+	width: 50%;
 }
 
 #north-right {
@@ -64,6 +66,8 @@ html {
 	text-decoration: none;
 	color: gold;
 	display: inline;
+	font-size: 1rem;
+    line-height: 3rem;
 }
 
 #north-right a:hover {
@@ -82,9 +86,9 @@ html {
 
 #north-right img {
 	margin-top: 0vmin;
-	height: 8vmin;
-	width: 8vmin;
-	border-radius: 4vmin;
+	height: 5vmin;
+	width: 5vmin;
+	border-radius: 2.5vmin;
 	vertical-align: middle;
 }
 
@@ -102,10 +106,8 @@ html {
 }
 
 #up-img-window {
-	left: 62vmin;
-	top: 20vmin;
-	width: 75vmin;
-	height: 40vmin;
+	left: 62vmin;top: 20vmin;
+	width: 75vmin;height: 40vmin;
 	position: absolute;
 	background-color: #2d062f;
 	z-index: 999;
@@ -113,7 +115,16 @@ html {
 	box-shadow: 3px -3px 3px #000;
 	display: none;
 }
-
+#alter-window{
+	left: 25%;top: 300%;
+	width: 50%;height: 500%;
+	position: absolute;
+	background-color: #2d062f;
+	z-index: 99999;
+	padding: 1vmin;
+	box-shadow: 3px -3px 3px #000;
+	display: none;
+}
 #show-img {
 	width: 33vmin;
 	height: 40vmin;
@@ -142,18 +153,21 @@ html {
 </style>
 <!-- 所有页面的头导航-->
 <nav id="north-center">
-	<a page="square">广场</a> <a page="chuangzuo">创作</a> <a page="jiayuan">家园</a>
+	<a page="square">广场</a>
+	<a page="write">创作</a>
+	<a page="jiayuan">家园</a>
 	<a page="shezhi">设置</a>
 </nav>
 <div id="north-right">
 	<div id="user-img">
-		<img id="show-user-img" alt="请上传您的头像" style="background: #2d062f" />
+		<!--img id="show-user-img" alt="请上传您的头像" style="background: #2d062f" /-->
 		<!--  a id="upload-img" onclick="showImgWindow()">更&nbsp换（服务器版本暂不支持）</a-->
 	</div>
 	<div id="user">
-		<a id="user-name" style="float: right;">${user.ownname}</a>
+		<a id="user-loginOut" style="float: right;" href="/user/loginOut">注销</a>
+		<a id="user-login" style="float: right;font-size: 1.2rem;margin: .5rem;line-height: 2rem;font-family: 宋体;" href="/user/login">登录</a>
 	</div>
-	<a style="float: right;" href="/user/login">登录&nbsp;&nbsp;&nbsp;&nbsp;</a>
+	
 </div>
 <!-- 弹出的窗体-->
 <div id="up-img-window">
@@ -162,12 +176,33 @@ html {
 	<button type="button" id="up-img-but">上传</button>
 	<button type="button" id="hide-img-but" onclick="showImgWindow()">取消</button>
 </div>
+<!-- 提示的窗体-->
+<div id="alter-window">
+	<div>weqeqrqrrwewtwtwttwtwzcvfsg</div>
+	<button type="button" class="alter-window-but">上传</button>
+	<button type="button" class="alter-window-but" >取消</button>
+</div>
 <script type="text/javascript">
+	function getUserName(){
+		$.ajax({
+			url : "/user/getUserName",
+			type : "POST",
+			success : function(result) {
+				if (""!= result) {
+					$("#user-login").text(result);
+					$("#user-login").attr('href','/');
+				} else {
+					$("#user-loginOut").hide();
+				}
+			}
+		});
+	}
+	getUserName();
 	var loginName = $("#user-name").text();
 	$("#user").hover(function() {//替换用户名与退出	
 		if (loginName == $("#user-name").text()) {
 			$("#user-name").text('退出');
-			$("#user-name").attr("href", "user/loginOut");
+			$("#user-name").attr("href", "/user/loginOut");
 		} else {
 			$("#user-name").text(loginName);
 			$("#user-name").attr("href", "");
@@ -233,4 +268,5 @@ html {
 		}
 		$(window).attr('location', "/page/" + $(this).attr("page"));
 	})
+	
 </script>

@@ -1,17 +1,17 @@
- <meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript" src="/static/js/jquery-1.8.2.js"></script>
 <script type="text/javascript" src="/static/js/wangEditor.min.js"></script>
-
+<title>分享快乐 记录点滴</title>
+<meta name="viewport" content="width=device-width, initial-scale=0.6">
 <style type="text/css">
 #write-title{
 	margin-left: 10%;
-	width:70%;height:3rem;
+	width:80%;height:2.5rem;
 	font-weight: 500;font-size: 1.5rem;line-height:3rem;text-align: center;
 	background-color: #eee;
 	border: none;
 }
 #write-role{
-	width:10%;height:3rem;
+	width:10%;height:2.6rem;
 	font-weight: 500;font-size: 1rem;line-height:3rem;text-align: center;
 	background-color: #eee;
 	border: none;
@@ -28,7 +28,7 @@
 #write-panl{
 	font-size: 1rem;
 	background-color: #eee;
-	height:25rem;
+	height:30rem;
 }
 #write-panl .w-e-menu{
 	font-size: 1.2rem;
@@ -38,9 +38,9 @@
 	cursor: text;
 }
 button{
-	width: 5rem;
-    height: 2rem;
-    border-radius: 2px;
+	width: 6rem;
+    height: 2.5rem;
+    border-radius: 5px;
     border: none;
     background: #888;
     cursor: pointer;
@@ -51,11 +51,11 @@ button{
 <div class="normal-text" >标题：</div>
 <div style="display: inline-block;width: 100%;">
 	<input id="write-title" ></input>
-	<select id="write-role" >
-		<option>公开</option>
-		<option>私人</option>
-	</select>
-	<input id="write-uuid" style="display:none"></input>
+	<!--  select id="write-role" >
+		<option value="public">公开</option>
+		<option value="private">私人</option>
+	</select-->
+	<input id="write-uuid" style="display: none;"></input>
 </div>
 <div class="normal-text" >正文：</div>
 <div id="write-content">
@@ -68,8 +68,27 @@ button{
 </div>
 
 <script>
+function browserRedirect() {
+    var sUserAgent = navigator.userAgent.toLowerCase();
+    var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+    var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+    var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+    var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+    var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+    var bIsAndroid = sUserAgent.match(/android/i) == "android";
+    var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+    var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+    if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+        return("phone");
+    } else {
+    	return("pc");
+    }
+}
 	var E = window.wangEditor;
 	var editor = new E('#write-panl');
+	if(browserRedirect()!="pc"){
+		editor.customConfig.menus = [ 'emoticon','bold',  'link', 'table','undo', 'redo','fontCount']
+	}
 	editor.customConfig.debug = true;
 	editor.customConfig.uploadImgServer = '/upload/uploadArticleImage'
 	editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
@@ -96,14 +115,26 @@ button{
 	}
 	editor.create();
 	
+	function init(){//赋予编辑框正文和标题
+		$.ajax({
+			url : "/article/editArticle",
+			type : "POST",
+			async:false, 
+			success : function(article) {
+				$('#write-title').val(article.title);
+				$("#write-uuid").val(article.id)
+				editor.txt.html(article.content);
+			}
+		});
+	}
 	function clearArticle(){
-		var r=confirm("确认清空所有文字?");
+		var r=confirm("确认清空所有文字?清空后将不能被回退找回");
 	  	if (r==true){//选择取消
 	  		editor.txt.clear();
 	  	}
 	}
 	function uploadArticle(){
-		if ($('#write-title').val()==""||$('#write-title').val()=="请把我填上标题，谢谢！！") {
+		if ($('#write-title').val()=="") {
 			alert("请把我填上标题，谢谢！！");
 			return;
 		}
@@ -111,23 +142,27 @@ button{
 			alert('<p>稍微写点东西吧</p>')
 			return;
 		}
-		var r=confirm("确认提交保存?");
+		var r=confirm("确认提交保存?保存后可以在广场查看");
 	  	if (r==false){//选择取消
 	  		return;
 	  	}
 		$.ajax({
 			url : "/article/uploadArticle",
 			type : "POST",
-			data : {articleUuid:$('#write-uuid').val(),articleRole:$('#write-role option:selected').val(),articleCentent:editor.txt.html(),title:$('#write-title').val()},
+			data : {articleUuid:$('#write-uuid').val(),articleRole:'public',articleContent:editor.txt.html(),title:$('#write-title').val()},
 			async:false, 
 			success : function(articleUuid) {
-				if(articleUuid!=""&&articleUuid.length==32){
-					$('#write-uuid').val(articleUuid);
-					alert("保存成功!\r\n您可以继续编辑，文本再次保存后会更新上一次保存的文本");
+				if(articleUuid=="success"){
+					alert("保存成功!");
+					$(window).attr('location',"/page/square");
+				}else if(articleUuid=='errUser'){
+					alert("保存失败,文章作者不是当前登录人!");
 				}else{
-					alert("保存失败!请联系管理员")
+					alert("保存失败!请联系李杰：465012217");
 				}
 			}
 		});
 	}
+	
+	init();
 </script>

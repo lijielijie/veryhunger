@@ -81,7 +81,6 @@ public class LoginController {
      * 退出登录
      */
     @RequestMapping("/user/loginOut")
-    @ResponseBody
     public String loginOut(HttpServletRequest req, HttpServletResponse res){ 
         HttpSession s=req.getSession();
         User user=(User)s.getAttribute(BaseSet.USER);
@@ -90,6 +89,20 @@ public class LoginController {
         s.setAttribute(BaseSet.LOGIN_FLAG, false);
         s.invalidate();
         return "welcome";
+    }
+    /**
+     * 获取用户名
+     */
+    @RequestMapping("/user/getUserName")
+    @ResponseBody
+    public String getUserName(HttpServletRequest req, HttpServletResponse res){ 
+        HttpSession s=req.getSession();
+        User user=(User)s.getAttribute(BaseSet.USER);
+        if(user!=null) {
+        	return user.getOwnname();
+        }else{
+        	return "";
+        }
     }
     /**
      *校验登录信息

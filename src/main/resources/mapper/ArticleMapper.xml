@@ -17,13 +17,13 @@
     <result column="rmk5" property="rmk5" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.entity.Article" extends="BaseResultMap" >
-    <result column="centent" property="centent" jdbcType="LONGVARCHAR" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, title,(select ownname from lj_user aa where aa.uid=userId) userName, userId, role, state, createTime, updateTime, readCount, rmk1, rmk2, rmk3, rmk4, rmk5
   </sql>
   <sql id="Blob_Column_List" >
-    centent
+    content
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
     select 
@@ -41,11 +41,11 @@
     insert into lj_article (id,title, userId, role, 
       state, createTime, updateTime, readCount,
       rmk1, rmk2, rmk3, rmk4, 
-      rmk5, centent)
+      rmk5, content)
     values (#{id,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, 
       #{state,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR},#{readCount,jdbcType=INTEGER},
       #{rmk1,jdbcType=VARCHAR}, #{rmk2,jdbcType=VARCHAR}, #{rmk3,jdbcType=VARCHAR}, #{rmk4,jdbcType=VARCHAR}, 
-      #{rmk5,jdbcType=VARCHAR}, #{centent,jdbcType=LONGVARCHAR})
+      #{rmk5,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.entity.Article" >
     <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER" >
@@ -89,8 +89,8 @@
       <if test="rmk5 != null" >
         rmk5,
       </if>
-      <if test="centent != null" >
-        centent,
+      <if test="content != null" >
+        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -130,8 +130,8 @@
       <if test="rmk5 != null" >
         #{rmk5,jdbcType=VARCHAR},
       </if>
-      <if test="centent != null" >
-        #{centent,jdbcType=LONGVARCHAR},
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -174,8 +174,8 @@
       <if test="rmk5 != null" >
         rmk5 = #{rmk5,jdbcType=VARCHAR},
       </if>
-      <if test="centent != null" >
-        centent = #{centent,jdbcType=LONGVARCHAR},
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -194,18 +194,20 @@
       rmk4 = #{rmk4,jdbcType=VARCHAR},
       rmk5 = #{rmk5,jdbcType=VARCHAR},
       readCount= #{readCount,jdbcType=INTEGER},
-      centent = #{centent,jdbcType=LONGVARCHAR}
+      content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   
   <select id="getArticlesByUserId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
-    select 
+    select distinct
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from lj_article
-    where userId = #{userId,jdbcType=VARCHAR}
-    or (userId !=#{userId,jdbcType=VARCHAR} and role='public')
+    from lj_article 
+    where role='public'
+    <if test="userId==null or userId==''">
+    	or userId = #{userId,jdbcType=VARCHAR}
+    </if>
   </select>
   
   <select id="selfArticleList" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >

@@ -17,7 +17,7 @@ public class Article extends BaseEntity{
 
     private String role;//文章公开权限
 
-    private String centent;//正文
+    private String content;//正文
 
     private String state;//文章失效状态
 
@@ -72,12 +72,12 @@ public class Article extends BaseEntity{
 		this.role = role;
 	}
 
-	public String getCentent() {
-		return centent;
+	public String getContent() {
+		return content;
 	}
 
-	public void setCentent(String centent) {
-		this.centent = centent;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getState() {
@@ -162,8 +162,8 @@ public class Article extends BaseEntity{
 
 	@Override
 	public String toString() {
-		return "Article [id=" + id + ", title=" + title + ", userId=" + userId + ", role=" + role + ", centent="
-				+ centent + ", state=" + state + ", createTime=" + createTime + ", updateTime=" + updateTime
+		return "Article [id=" + id + ", title=" + title + ", userId=" + userId + ", role=" + role + ", content="
+				+ content + ", state=" + state + ", createTime=" + createTime + ", updateTime=" + updateTime
 				+ ", readCount=" + readCount + ", rmk1=" + rmk1 + ", rmk2=" + rmk2 + ", rmk3=" + rmk3 + ", rmk4=" + rmk4
 				+ ", rmk5=" + rmk5 + ", userName=" + userName + "]";
 	}
